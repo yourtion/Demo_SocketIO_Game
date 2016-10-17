@@ -1,7 +1,7 @@
 'use strict';
 
 const Redis = require('ioredis');
-$.redis = new Redis($.config.redis);
+const redis = new Redis($.config.redis);
 
 Redis.Command.setReplyTransformer('hgetall', function (result) {
   if (Array.isArray(result)) {
@@ -13,3 +13,5 @@ Redis.Command.setReplyTransformer('hgetall', function (result) {
   }
   return result;
 });
+
+module.exports = redis;

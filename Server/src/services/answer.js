@@ -63,3 +63,5 @@ answer.digMime = function (data, sid, callback) {
   });
 
 };
+
+module.exports = answer;
