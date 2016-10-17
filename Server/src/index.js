@@ -3,7 +3,7 @@
 global.$ = {};
 $.utils = require('./lib/utils');
 $.config = require('./config/index');
-$.reids = require('./lib/redis');
+$.redis = require('./lib/redis');
 $.mime = require('./modules/mime');
 $.answer = require('./services/answer');
 $.room = require('./services/room');

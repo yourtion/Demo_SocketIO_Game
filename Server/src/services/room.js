@@ -11,10 +11,11 @@ room.createRoom = function (data, callback) {
     roomNo = data.no;
   }
 
-  const sid = data.get('sid');
+  const sid = data.sid;
   const key = $.utils.getRedisKey(roomNo);
   $.redis.hgetall(key, (_err, room) => {
-    if (room) { // 房间已经开了
+    logger.trace('room: ', room);
+    if (room && room.cnt) { // 房间已经开了
       let userCnt = parseInt(room.cnt[0], 10);
       const mimeData = room.data[0];
       if (userCnt < $.config.maxUserCount) {
@@ -44,8 +45,8 @@ room.createRoom = function (data, callback) {
         'cnt': 1,
         'online': true,
         'lefts': $.config.maxUserCount,
-        'answer': JSON.dumps(mimeData),
-        'data': JSON.dumps(initData),
+        'answer': JSON.stringify(mimeData),
+        'data': JSON.stringify(initData),
         'curId': sid,
         'lastId': 0,
       };
