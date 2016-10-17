@@ -14,3 +14,7 @@ if (process.env.NODE_ENV === 'production') {
 exports.createLogger = (name) => {
   return require('bunyan').createLogger({ name, level: env.level });
 };
+
+exports.getRedisKey = (name) => {
+  return 'room#' + name;
+};
