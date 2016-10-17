@@ -3,6 +3,7 @@
 global.$ = {};
 $.utils = require('./lib/utils');
 $.config = require('./config/index');
+$.infos = {};
 
 const express = require('express');
 const app = $.app = express();

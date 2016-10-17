@@ -3,4 +3,7 @@ module.exports = {
   globals: {
     '$': false
   },
+  rules: {
+    'no-inline-comments': 'off'
+  },
 };

@@ -71,3 +71,4 @@ mime.genMimeArr = function () {
 };
 
 // mime.genMimeArr();
+module.exprots = mime;
