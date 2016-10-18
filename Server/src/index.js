@@ -4,7 +4,6 @@ global.$ = {};
 $.utils = require('./lib/utils');
 $.config = require('./config/index');
 $.redis = require('./lib/redis');
-$.mime = require('./services/mime');
 $.answer = require('./services/answer');
 $.room = require('./services/room');
 $.infos = {};
