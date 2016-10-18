@@ -30,6 +30,7 @@ room.createRoom = function (data, callback) {
         $.redis.hset(key, 'cnt', userCnt, (err) => {
           if(err) return callback(err);
 
+          $.infos[roomNo][sid] = { score: 0 };
           const lefts = room.lefts[0];
           const result = {
             'map': mimeData,
@@ -66,6 +67,8 @@ room.createRoom = function (data, callback) {
       $.redis.hmset(key, room, 60 * 60 * 12, (err) => { // 12小时
         if(err) return callback(err);
         
+        $.infos[roomNo] = {};
+        $.infos[roomNo][sid] = { score: 0 };
         const rspData = {
           'map': initData,
           'count': mime.mimeCnt, // mimeCnt
