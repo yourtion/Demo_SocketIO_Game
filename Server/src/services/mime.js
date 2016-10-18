@@ -1,30 +1,18 @@
 'use strict';
 
+const logger = $.utils.createLogger('service:mime');
+
 const mime = {};
 
-const mimeCnt = 10;
-const col = 9;
-const row = 9;
+const mimeCnt = mime.mimeCnt = 10;
+const col = mime.col = 9;
+const row = mime.row = 9;
 
-mime.getInitArr = function (initValue) {
-  // 地图场景数据
-  const data = [];
-  // 初始化数据
-  for (let r = 0; r < row; r++) {
-    const tmpArr = [];
-    for (let c = 0; c < col; c++) {
-      tmpArr.push(initValue);
-    }
-    data.push(tmpArr);
-  }
-  return data;
-};
-
-mime.getRandPos = function (max) {
+function getRandPos(max) {
   return parseInt(Math.random() * (max), 10);
-};
+}
 
-mime.increaseArround = function (data, r, c) {
+function increaseArround(data, r, c) {
   // upper row, current row, and the lower row
   for (let k = -1; k < 2; k++) { // -1, 0, 1
     const rr = r - k; // tmp row
@@ -38,17 +26,34 @@ mime.increaseArround = function (data, r, c) {
       }
     }
   }
+}
+
+mime.getInitArr = function (initValue) {
+  logger.debug('getInitArr');
+  // 地图场景数据
+  const data = [];
+  // 初始化数据
+  for (let r = 0; r < row; r++) {
+    const tmpArr = [];
+    for (let c = 0; c < col; c++) {
+      tmpArr.push(initValue);
+    }
+    data.push(tmpArr);
+  }
+  logger.trace('getInitArr: \n', data);
+  return data;
 };
 
 mime.genMimeArr = function () {
+  logger.debug('genMimeArr');
   let tmpCnt = mimeCnt;
   const mimeMap = {}; // 辅助判断各格子的状态
   // 地图场景数据
   const data = mime.getInitArr(0);
   // 生成雷
   while (tmpCnt > 0) {
-    const randX = mime.getRandPos(col); // x => col
-    const randY = mime.getRandPos(row); // y => row
+    const randX = getRandPos(col); // x => col
+    const randY = getRandPos(row); // y => row
     const key = randY + '-' + randX;
     if (!(key in mimeMap)) {
       mimeMap[key] = 1;
@@ -61,12 +66,12 @@ mime.genMimeArr = function () {
   for (let r = 0; r < row; r++) {
     for (let c = 0; c < col; c++) {
       if (data[r][c] < 0) {
-        mime.increaseArround(data, r, c);
+        increaseArround(data, r, c);
       }
     }
   }
   // 打印结果
-  // console.log(data);
+  logger.trace('genMimeArr: \n', data);
   return data;
 };
 
