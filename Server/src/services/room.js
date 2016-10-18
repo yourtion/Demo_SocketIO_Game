@@ -13,17 +13,16 @@ room.createRoom = function (data, callback) {
 
   const sid = data.sid;
   const key = $.utils.getRedisKey(roomNo);
-  $.redis.hgetall(key, (_err, room) => {
-    logger.trace('room: ', room);
+  $.redis.hgetall(key, (err, room) => {
     if (room && room.cnt) { // 房间已经开了
-      let userCnt = parseInt(room.cnt[0], 10);
-      const mimeData = room.data[0];
+      let userCnt = parseInt(room.cnt, 10);
+      const mimeData = room.data;
       if (userCnt < $.config.maxUserCount) {
         userCnt += 1; // TODO: 这里可以记录另一个玩家的信息
         $.redis.hset(key, 'cnt', userCnt, (_err) => {
           const lefts = room.lefts[0];
           const rspData = {
-            'map': JSON.loads(mimeData),
+            'map': mimeData,
             'count': lefts,
           };
           // self.write(rspSuccess(rspData))
@@ -32,7 +31,7 @@ room.createRoom = function (data, callback) {
 
       } else {
         // self.write(rspError(u'房间%s已经满员' % roomNo))
-        callback(new Error(`房间{$roomNo}已经满员`));
+        return callback(new Error(`房间{$roomNo}已经满员`));
         // self.finish()
         // return
       }
@@ -50,14 +49,16 @@ room.createRoom = function (data, callback) {
         'curId': sid,
         'lastId': 0,
       };
-      $.redis.hmset(key, room, 60 * 60 * 12, (_err) => {
+      // logger.trace(key ,room);
+      $.redis.hmset(key, room, (err, ret) => {
+        logger.trace(err, ret);
         const rspData = {
           'map': initData,
           'count': 10, // mimeCnt
         };
         logger.trace('room number: ', roomNo);
         // self.write(rspSuccess(rspData))
-        callback(null, rspData);
+       return callback(null, rspData);
       }); // 12小时
 
     }
