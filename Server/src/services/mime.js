@@ -4,7 +4,7 @@ const logger = $.utils.createLogger('service:mime');
 
 const mime = {};
 
-const mimeCnt = mime.mimeCnt = 10;
+const mimeCnt = mime.mimeCnt = $.config.mimeCnt;
 const col = mime.col = 9;
 const row = mime.row = 9;
 
