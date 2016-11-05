@@ -11,11 +11,13 @@ answer.digMime = function (data, sid, callback) {
   let y = -1;
   let roomNo = 0;
   if (data) {
-    x = data.x ? parseInt(data.x, 10) : undefined;
-    y = data.y ? parseInt(data.y, 10) : undefined;
-    roomNo = data.no ? parseInt(data.no, 10) : undefined;
+    x = parseInt(data.x, 10);
+    y = parseInt(data.y, 10);
+    roomNo = parseInt(data.no, 10);
+  } else {
+    return callback(new Error('x or y or roomNo is invalid'));
   }
-  if (x < 0 || y < 0 || !roomNo) {
+  if (isNaN(x) || isNaN(y) || isNaN(roomNo) || x < 0 || y < 0 || x > 8 || y > 8 || !roomNo) {
     return callback(new Error('x or y or roomNo is invalid'));
   }
 
@@ -68,8 +70,9 @@ answer.digMime = function (data, sid, callback) {
           logger.trace('infos: ', info);
           return callback(null, result);
         });
+      } else {
+        return callback(null, result);
       }
-      return callback(null, result);
 
     });
 
