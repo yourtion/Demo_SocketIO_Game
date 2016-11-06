@@ -10,12 +10,14 @@
     "socket.io": "^1.5.0"
   },
   "devDependencies": {
+    "eslint-config-guo": "0.0.4",
+    "mocha": "^3.1.2",
     "nodemon": "^1.11.0"
   },
   "scripts": {
     "start": "export NODE_ENV=production && node src/index.js",
     "dev": "export NODE_ENV=development && nodemon src/index.js | ./node_modules/.bin/bunyan -o short",
-    "lint": "eslint --fix ./src"
+    "lint": "eslint --fix ."
   },
   "repository": {
     "type": "git",
