@@ -10,10 +10,12 @@ $.infos = {};
 
 const express = require('express');
 const app = $.app = express();
-const server = require('http').Server(app);
+const server = require('http').createServer();
 const logger = $.utils.createLogger('index');
 const path = require('path');
 
+require('./websocket')(server);
+server.on('request', app);
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../static/index.html'));
