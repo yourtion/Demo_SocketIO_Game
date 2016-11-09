@@ -11,16 +11,9 @@ $.infos = {};
 const express = require('express');
 const app = $.app = express();
 const server = require('http').Server(app);
-const io = $.socket = require('socket.io')(server);
 const logger = $.utils.createLogger('index');
 const path = require('path');
 
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    logger.warn(data);
-  });
-});
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../static/index.html'));
