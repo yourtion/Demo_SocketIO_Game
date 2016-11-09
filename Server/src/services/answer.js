@@ -16,6 +16,7 @@ answer.digMime = coroutine.wrap(function* (data, sid) {
     y = parseInt(data.y, 10);
     roomNo = parseInt(data.no, 10);
   } else {
+    logger.error(x, y, roomNo);
     throw new Error('x or y or roomNo is invalid');
   }
   if (isNaN(x) || isNaN(y) || isNaN(roomNo) || x < 0 || y < 0 || x > 8 || y > 8 || !roomNo) {
