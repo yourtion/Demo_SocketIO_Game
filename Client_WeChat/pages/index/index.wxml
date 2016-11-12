@@ -6,8 +6,8 @@
         <text class="label my-score">剩余金子：{{leftGolds}}</text>
     </view>
     <view wx:for="{{mimeMap}}" wx:for-item="row" wx:for-index="i" 
-        class="flex-container">
-        <button wx:for="{{row}}" wx:for-item="cell" wx:for-index="j" 
+        class="flex-container" wx:key="{{i}}">
+        <button wx:for="{{row}}" wx:for-item="cell" wx:for-index="j" wx:key="{{i}}-{{j}}"
             class="flex-item {{cell<0?'gold':''}} {{cell<9?'open':''}}" 
             bindtap="digGold" data-x="{{j}}" data-y="{{i}}" data-value="{{cell}}">
             {{cell<9?(cell<0?'*':cell):"-"}}
