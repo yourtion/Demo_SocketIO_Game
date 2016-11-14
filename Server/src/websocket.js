@@ -5,21 +5,29 @@ const logger = $.utils.createLogger('service:socket');
 const url = require('url');
 
 const roomAction = coroutine.wrap(function* (no, sid){
-  const data = { no, sid };
-  const result = yield $.room.createRoom(data);
-  result.type = 'create';
-  return result;
+  try {
+    const data = { no, sid };
+    const result = yield $.room.createRoom(data);
+    result.type = 'create';
+    return result;
+  } catch(err) {
+    throw err;
+  }
 });
 const digAction = coroutine.wrap(function* (msg, sid){
-  const ret = yield $.answer.digMime(msg, sid);
-  const result = {
-    'type': 'dig',
-    'answer': ret,
-    'isMe': false,
-    'x': msg['x'],
-    'y': msg['y'],
-  };
-  return result;
+  try {
+    const ret = yield $.answer.digMime(msg, sid);
+    const result = {
+      'type': 'dig',
+      'answer': ret,
+      'isMe': false,
+      'x': msg['x'],
+      'y': msg['y'],
+    };
+    return result;
+  } catch(err) {
+    throw err;
+  }
 });
 
 module.exports = function (server) {
@@ -27,6 +35,7 @@ module.exports = function (server) {
   const wss = new WebSocketServer({ server });
  
   wss.on('connection', function connection(ws) {
+    
     const request = url.parse(ws.upgradeReq.url, true);
     const sid = parseInt(Math.random() * 1000, 10);
     logger.trace(request);
@@ -37,24 +46,22 @@ module.exports = function (server) {
     ws.on('message', coroutine.wrap(function* incoming(message) {
       logger.trace('received: %s', message);
       const msg = JSON.parse(message);
-      if(msg.type === 'dig') {
-        logger.trace('dig');
-        const ret = yield digAction(msg, sid);
-        const result = {
-          data: ret,
-          errCode: 0,
-        };
-        ws.send(JSON.stringify(result));
+      let result;
+      try {
+        if(msg.type === 'dig') {
+          logger.trace('dig');
+          const ret = yield digAction(msg, sid);
+          result = $.utils.apiSucceed(ret);
+        }
+        if(msg.type === 'create') {
+          logger.trace('create');
+          const ret = yield roomAction(roomNo, sid);
+          result = $.utils.apiSucceed(ret);
+        }
+      } catch (err) {
+        result = $.utils.apiFail(err);
       }
-      if(msg.type === 'create') {
-        logger.trace('create');
-        const ret = yield roomAction(roomNo, sid);
-        const result = {
-          data: ret,
-          errCode: 0,
-        };
-        ws.send(JSON.stringify(result));
-      }
+      ws.send(result);
     }));
   });
 };

@@ -11,10 +11,26 @@ if (process.env.NODE_ENV === 'production') {
   env.level = 'trace';
 }
 
-exports.createLogger = (name) => {
+exports.createLogger = function (name) {
   return require('bunyan').createLogger({ name, level: env.level });
 };
 
-exports.getRedisKey = (name) => {
+exports.getRedisKey = function (name) {
   return 'room#' + name;
+};
+
+exports.apiSucceed = function (ret) {
+  const result = {
+    data: ret,
+    errCode: 0,
+  };
+  return JSON.stringify(result);
+};
+
+exports.apiFail = function (err) {
+  const result = {
+    errCode: err.code || -1,
+    errMsg: err.message || '',
+  };
+  return JSON.stringify(result);
 };
