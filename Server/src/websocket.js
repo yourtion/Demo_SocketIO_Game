@@ -5,29 +5,22 @@ const logger = $.utils.createLogger('service:socket');
 const url = require('url');
 
 const roomAction = coroutine.wrap(function* (no, sid){
-  try {
-    const data = { no, sid };
-    const result = yield $.room.createRoom(data);
-    result.type = 'create';
-    return result;
-  } catch(err) {
-    throw err;
-  }
+  const data = { no, sid };
+  const result = yield $.room.createRoom(data);
+  result.type = 'create';
+  return result;
 });
+
 const digAction = coroutine.wrap(function* (msg, sid){
-  try {
-    const ret = yield $.answer.digMime(msg, sid);
-    const result = {
-      'type': 'dig',
-      'answer': ret,
-      'isMe': false,
-      'x': msg['x'],
-      'y': msg['y'],
-    };
-    return result;
-  } catch(err) {
-    throw err;
-  }
+  const ret = yield $.answer.digMime(msg, sid);
+  const result = {
+    'type': 'dig',
+    'answer': ret,
+    'isMe': false,
+    'x': msg['x'],
+    'y': msg['y'],
+  };
+  return result;
 });
 
 module.exports = function (server) {
