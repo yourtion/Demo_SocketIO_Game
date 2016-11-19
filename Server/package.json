@@ -21,7 +21,7 @@
     "dev": "export NODE_ENV=development && nodemon src/index.js | ./node_modules/.bin/bunyan -o short",
     "lint": "eslint --fix ./src ./test ",
     "test": "mocha",
-    "test-cov": "./node_modules/.bin/istanbul cover _mocha"
+    "test:cov": "./node_modules/.bin/istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
